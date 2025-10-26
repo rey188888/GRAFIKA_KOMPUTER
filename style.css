@@ -65,6 +65,21 @@ button {
 }
 
 
+#deleteBtn {
+  background-color: #ff9800;
+}
+#deleteBtn:hover {
+  background-color: #e68900;
+}
+
+#resetBtn {
+  background-color: #dc3545;
+}
+#resetBtn:hover {
+  background-color: #a71d2a;
+}
+
+
 canvas {
   background: #fdfdfd;
   border-radius: 10px;
