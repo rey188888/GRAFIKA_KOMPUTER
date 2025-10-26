@@ -7,6 +7,11 @@
 // Visualisasi AVL Tree
 
 const avl = new AVLTree();
+const canvas = document.getElementById("treeCanvas");
+const ctx = canvas.getContext("2d");
+const insertBtn = document.getElementById("insertBtn");
+const deleteBtn = document.getElementById("deleteBtn");
+const resetBtn = document.getElementById("resetBtn");
 
 // Tes manual di console
 avl.root = avl.insert(avl.root, 10);

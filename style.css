@@ -1,13 +1,73 @@
+/* 
+2372013 - Rey Immanuel
+2372017 - Christian Jeffry
+2372019 - Charles Sung
+2372021 - Nathanael
+
+Tugas Besar Grafika Komputer
+Visualisasi AVL Tree
+*/
+
 body {
-    background-color: teal;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 100vh;
-    align-items: center; 
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
 }
 
+.container {
+  text-align: center;
+  margin-top: 30px;
+  background: white;
+  padding: 20px 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.input-area {
+  margin-bottom: 15px;
+}
+
+#nodeValue {
+  padding: 10px;
+  width: 200px;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  outline: none;
+  font-size: 16px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 15px;
+  transition: background 0.3s ease;
+}
+
+#insertBtn {
+  background-color: #007bff;
+}
+#insertBtn:hover {
+  background-color: #0056b3;
+}
+
+
 canvas {
-    background-color: white;
-    border: 1px solid black;
+  background: #fdfdfd;
+  border-radius: 10px;
+  margin-top: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
 }
