@@ -3,10 +3,83 @@
 // 2372019 - Charles Sung
 // 2372021 - Nathanael
 
-// Tugas Besar Grafika Komputer
-// Visualisasi AVL Tree
+// ================================
+// Bagian: graflib.js (digabung)
+// ================================
 
-import { initGraphics, clearCanvas, drawNumberBox } from "./graflib.js";
+let canvas;
+let ctx;
+let imageData;
+
+function initGraphics(canvasId) {
+  canvas = document.getElementById(canvasId);
+  ctx = canvas.getContext("2d");
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "black";
+}
+
+// Algoritma DDA
+function draw_dot(x, y) {
+  let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  let index = 4 * (Math.round(x) + Math.round(y) * canvas.width);
+  imageData.data[index] = 0;
+  imageData.data[index + 1] = 0;
+  imageData.data[index + 2] = 0;
+  imageData.data[index + 3] = 255;
+  ctx.putImageData(imageData, 0, 0);
+}
+
+function dda_line(x1, y1, x2, y2) {
+  let dx = x2 - x1;
+  let dy = y2 - y1;
+
+  let steps = Math.max(Math.abs(dx), Math.abs(dy));
+  let Xinc = dx / steps;
+  let Yinc = dy / steps;
+
+  let X = x1;
+  let Y = y1;
+
+  for (let i = 0; i <= steps; i++) {
+    draw_dot(X, Y);
+    X += Xinc;
+    Y += Yinc;
+  }
+}
+
+function draw_polygon(points) {
+  for (let i = 0; i < points.length; i++) {
+    let x1 = points[i].x;
+    let y1 = points[i].y;
+    let x2 = points[(i + 1) % points.length].x;
+    let y2 = points[(i + 1) % points.length].y;
+    dda_line(x1, y1, x2, y2);
+  }
+}
+
+function drawText(x, y, text) {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "black";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text, x, y);
+}
+
+function drawNumberBox(x, y, size, number) {
+  const half = size / 2;
+  const points = [
+    { x: x, y: y },
+    { x: x + size, y: y },
+    { x: x + size, y: y + size },
+    { x: x, y: y + size },
+  ];
+  draw_polygon(points);
+  drawText(x + half, y + half, number);
+}
+
+function clearCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
 
 class AVLNode {
   constructor(info) {
@@ -149,29 +222,7 @@ class AVLTree {
 }
 
 const avl = new AVLTree();
-initGraphics("mycanvas");
 
-// insert manual
-avl.root = avl.insert(avl.root, 10);
-avl.root = avl.insert(avl.root, 20);
-avl.root = avl.insert(avl.root, 30);
-avl.root = avl.insert(avl.root, 40);
-avl.root = avl.insert(avl.root, 50);
-avl.root = avl.insert(avl.root, 25);
-avl.root = avl.insert(avl.root, 71);
-avl.root = avl.insert(avl.root, 80);
-avl.root = avl.insert(avl.root, 15);
-
-console.log("Inorder traversal:");
-avl.printInorder(avl.root);
-console.log("Tinggi pohon:", avl.treeHeight());
-
-// hapus node
-avl.root = avl.delete(avl.root, 30);
-console.log("Setelah hapus 30:");
-avl.printInorder(avl.root);
-
-//  gambar AVL Tree ke kanvas
 function drawInorderToCanvas(node, x, y, gapX, size) {
   if (node) {
     x = drawInorderToCanvas(node.left, x, y, gapX, size);
@@ -182,6 +233,40 @@ function drawInorderToCanvas(node, x, y, gapX, size) {
   return x;
 }
 
-// bersihkan & gambar ulang
-clearCanvas();
-drawInorderToCanvas(avl.root, 50, 100, 70, 40);
+const insertBtn = document.getElementById("insertBtn");
+const deleteBtn = document.getElementById("deleteBtn");
+const resetBtn = document.getElementById("resetBtn");
+const nodeValue = document.getElementById("nodeValue");
+
+function refreshCanvas() {
+  clearCanvas();
+  drawInorderToCanvas(avl.root, 50, 100, 70, 40);
+}
+
+insertBtn.addEventListener("click", () => {
+  const val = parseInt(nodeValue.value);
+  if (!isNaN(val)) {
+    avl.root = avl.insert(avl.root, val);
+    refreshCanvas();
+    nodeValue.value = "";
+  }
+});
+
+deleteBtn.addEventListener("click", () => {
+  const val = parseInt(nodeValue.value);
+  if (!isNaN(val)) {
+    avl.root = avl.delete(avl.root, val);
+    refreshCanvas();
+    nodeValue.value = "";
+  }
+});
+
+resetBtn.addEventListener("click", () => {
+  avl.root = null;
+  clearCanvas();
+  nodeValue.value = "";
+});
+
+window.onload = function () {
+  initGraphics("mycanvas");
+};
