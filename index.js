@@ -47,6 +47,50 @@ function dda_line(x1, y1, x2, y2) {
   }
 }
 
+function garisPenghubung(x1, y1, x2, y2, size) {
+  let xAwal = x1 + size / 2;
+  let yAwal = y1 + size / 2;
+  let xAkhir = x2 + size / 2;
+  let yAkhir = y2 + size / 2;
+
+  let dx = xAkhir - xAwal;
+  let dy = yAkhir - yAwal;
+  let panjang = Math.sqrt(dx * dx + dy * dy);
+
+  if (panjang === 0) return;
+  let nx = dx / panjang;
+  let ny = dy / panjang;
+
+  let titikTengah = size / 2.2;
+
+  let xMulai = xAwal + nx * titikTengah;
+  let yMulai = yAwal + ny * titikTengah;
+  let xSelesai = xAkhir - nx * titikTengah;
+  let ySelesai = yAkhir - ny * titikTengah;
+
+  dda_line(xMulai, yMulai, xSelesai, ySelesai);
+}
+
+function drawTree(node, x, y, level, jarakX, jarakY, size) {
+  if (node == null) return;
+
+  let leftX = x - jarakX / (level + 1);
+  let rightX = x + jarakX / (level + 1);
+  let nextY = y + jarakY;
+
+  if (node.left != null) {
+    garisPenghubung(x, y, leftX, nextY, size);
+  }
+
+  if (node.right != null) {
+    garisPenghubung(x, y, rightX, nextY, size);
+  }
+
+  drawNumberBox(x, y, size, node.info);
+  drawTree(node.left, leftX, nextY, level + 1, jarakX, jarakY, size);
+  drawTree(node.right, rightX, nextY, level + 1, jarakX, jarakY, size);
+}
+
 function draw_polygon(points) {
   for (let i = 0; i < points.length; i++) {
     let x1 = points[i].x;
@@ -240,7 +284,7 @@ const nodeValue = document.getElementById("nodeValue");
 
 function refreshCanvas() {
   clearCanvas();
-  drawInorderToCanvas(avl.root, 50, 100, 70, 40);
+  drawTree(avl.root, 400, 100, 1, 250, 100, 40);
 }
 
 insertBtn.addEventListener("click", () => {
