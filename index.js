@@ -218,26 +218,6 @@ function garisPenghubung(x1, y1, x2, y2, size) {
   dda_line(xMulai, yMulai, xSelesai, ySelesai);
 }
 
-function drawTree(node, x, y, level, jarakX, jarakY, size) {
-  if (node == null) return;
-
-  let leftX = x - jarakX / (level + 1);
-  let rightX = x + jarakX / (level + 1);
-  let nextY = y + jarakY;
-
-  if (node.left != null) {
-    garisPenghubung(x, y, leftX, nextY, size);
-  }
-
-  if (node.right != null) {
-    garisPenghubung(x, y, rightX, nextY, size);
-  }
-
-  drawNumberBox(x, y, size, node.info);
-  drawTree(node.left, leftX, nextY, level + 1, jarakX, jarakY, size);
-  drawTree(node.right, rightX, nextY, level + 1, jarakX, jarakY, size);
-}
-
 function draw_polygon(points) {
   for (let i = 0; i < points.length; i++) {
     let x1 = points[i].x;
