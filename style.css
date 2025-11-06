@@ -64,7 +64,6 @@ button {
   background-color: #0056b3;
 }
 
-
 #deleteBtn {
   background-color: #ff9800;
 }
@@ -78,7 +77,6 @@ button {
 #resetBtn:hover {
   background-color: #a71d2a;
 }
-
 
 canvas {
   background: #fdfdfd;
