@@ -10,6 +10,9 @@
 let canvas;
 let ctx;
 let imageData;
+let animationRunning = false;
+let animationFrame = 0;
+
 
 function initGraphics(canvasId) {
   canvas = document.getElementById(canvasId);
@@ -61,7 +64,7 @@ function garisPenghubung(x1, y1, x2, y2, size) {
   let nx = dx / panjang;
   let ny = dy / panjang;
 
-  let titikTengah = size / 2.2;
+  let titikTengah = size / 1.5;
 
   let xMulai = xAwal + nx * titikTengah;
   let yMulai = yAwal + ny * titikTengah;
@@ -267,15 +270,6 @@ class AVLTree {
 
 const avl = new AVLTree();
 
-function drawInorderToCanvas(node, x, y, gapX, size) {
-  if (node) {
-    x = drawInorderToCanvas(node.left, x, y, gapX, size);
-    drawNumberBox(x, y, size, node.info);
-    x += gapX;
-    x = drawInorderToCanvas(node.right, x, y, gapX, size);
-  }
-  return x;
-}
 
 const insertBtn = document.getElementById("insertBtn");
 const deleteBtn = document.getElementById("deleteBtn");
@@ -283,9 +277,40 @@ const resetBtn = document.getElementById("resetBtn");
 const nodeValue = document.getElementById("nodeValue");
 
 function refreshCanvas() {
-  clearCanvas();
-  drawTree(avl.root, 400, 100, 1, 250, 100, 40);
+  if (!animationRunning) {
+    animationRunning = true;
+    animateTree();
+  }
 }
+
+function animateTree() {
+  clearCanvas();
+  const offset = Math.sin(animationFrame) * 10;
+  drawTreeAnimated(avl.root, 400, 100 + offset, 1, 250, 100, 40);
+  animationFrame++;
+  requestAnimationFrame(animateTree);
+}
+
+function drawTreeAnimated(node, x, y, level, jarakX, jarakY, size) {
+  if (node == null) return;
+
+  let leftX = x - jarakX / (level + 1);
+  let rightX = x + jarakX / (level + 1);
+  let nextY = y + jarakY;
+
+  if (node.left != null) {
+    garisPenghubung(x, y, leftX, nextY, size);
+  }
+  if (node.right != null) {
+    garisPenghubung(x, y, rightX, nextY, size);
+  }
+
+  drawNumberBox(x, y, size, node.info);
+  drawTreeAnimated(node.left, leftX, nextY, level + 1, jarakX, jarakY, size);
+  drawTreeAnimated(node.right, rightX, nextY, level + 1, jarakX, jarakY, size);
+}
+
+
 
 insertBtn.addEventListener("click", () => {
   const val = parseInt(nodeValue.value);
